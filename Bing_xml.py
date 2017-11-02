@@ -34,12 +34,13 @@ try:
 
 
 	file_path="/root/Pictures/bing_xml/"
+	#change this path to /home/user_name/Pictures/bing_xml for debian users
 
 	def create_path(c):
 		if os.path.exists(c) is False:
-			os.makedirs(c)		
+			os.makedirs(c)
 
-	create_path(file_path)				
+	create_path(file_path)
 	image_path=file_path+image_name
 
 
