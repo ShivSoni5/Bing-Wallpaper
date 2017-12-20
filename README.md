@@ -1,2 +1,2 @@
-# Bing_Wallpaper 
-Downloads and set bing wallpaper of day as your Desktop Background :computer: :rainbow:
+# Bing_Wallpaper :computer: :rainbow:
+Downloads and set bing wallpaper of day as your Desktop Background 
