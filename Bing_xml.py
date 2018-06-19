@@ -1,10 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 #BING wallpaper for Desktop
 
 #BEFORE RUNNING THIS FILE GIVE IT PERMISSION TO EXECUTE!!!
 
-import os,re,urllib
+import os,re
+import urllib.request
 import xml.etree.ElementTree as ET
 
 url="https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=en_US"
@@ -13,48 +14,49 @@ url="https://www.bing.com/HPImageArchive.aspx?format=xml&idx=0&n=1&mkt=en_US"
 #n=1 is for number of images previous the day given by idx and mkt is Bing market area
 
 try:
-	page=urllib.urlopen(url)
-	#open the url
 
-	xml=ET.parse(page).getroot()
-	#get all the contents(elements) of xml page
+    page=urllib.request.urlopen(url)
+        #page=urllib.urlopen(url) #obsolete method
+        #open the url
 
-	images=xml.findall("image")
-	#find all the images tags in it and make a list to contain them
+    xml=ET.parse(page).getroot()
+        #get all the contents(elements) of xml page
 
-	base_image=images[0].find("url").text
-	#image with resolution 1366x768 to convert in better quality we convert it into 1920x1080
+    images=xml.findall("image")
+        #find all the images tags in it and make a list to contain them
 
-	correct_image=re.sub(r'\d+x\d+', "1920x1080", base_image)
-	#replaced 1366x768 with 1920x1080
+    base_image=images[0].find("url").text
+        #image with resolution 1366x768 to convert in better quality we convert it into 1920x1080
 
-	image_url="https://www.bing.com" + correct_image
+    correct_image=re.sub(r'\d+x\d+', "1920x1080", base_image)
+        #replaced 1366x768 with 1920x1080
 
-	image_name=images[0].find("startdate").text+".jpg"
+    image_url="https://www.bing.com" + correct_image
 
+    image_name=images[0].find("startdate").text+".jpg"
 
-	file_path="/root/Pictures/bing_xml/"
-	#change this path to /home/user_name/Pictures/bing_xml for debian users
+    file_path="/home/raj/Pictures/bing_xml/"
+        #change this path to /home/user_name/Pictures/bing_xml for debian users
 
-	def create_path(c):
-		if os.path.exists(c) is False:
-			os.makedirs(c)
+    def create_path(c):
+        if os.path.exists(c) is False:
+            os.makedirs(c)
 
-	create_path(file_path)
-	image_path=file_path+image_name
+    create_path(file_path)
+    image_path=file_path+image_name
 
+    if os.path.exists(image_path) is False:
+        urllib.request.urlretrieve(image_url,image_path)
+	    #urllib.urlretrieve(image_url,image_path)
+        command = 'gsettings set org.gnome.desktop.background picture-uri file://'+image_path
+        os.system(command)
+        notify = 'notify-send -u normal "Wallpaper updated successfully"'
+        os.system(notify)
 
-	if os.path.exists(image_path) is False:
-		urllib.urlretrieve(image_url,image_path)
-		command = 'gsettings set org.gnome.desktop.background picture-uri file://'+image_path
-		os.system(command)
-		notify = 'notify-send -u critical "Wallpaper updated successfully"'
-		os.system(notify)
-
-	else:
-		notify= 'notify-send -u critical "Wallpaper has been already updated!"'
-		os.system(notify)
+    else:
+        notify= 'notify-send -u normal "Wallpaper has been already updated!"'
+        os.system(notify)
 
 except:
-	notify='notify-send -u critical "Wallpaper cannot be updated! \n Error occur!"'
-	os.system(notify)
+    notify='notify-send -u critical "Wallpaper cannot be updated! \n Error occur!"'
+    os.system(notify)
