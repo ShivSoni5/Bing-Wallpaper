@@ -61,5 +61,5 @@ try:
         os.system(notify)
 
 except:
-    notify = 'notify-send -u critical "Wallpaper cannot be updated! \n Error occur!"'
+    notify = 'notify-send -u critical "Wallpaper cannot be updated! \n Error occurred!"'
     os.system(notify)
